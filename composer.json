@@ -1,0 +1,47 @@
+{
+    "name": "yurijbogdanov/crypto",
+    "type": "library",
+    "description": "PHP Crypto (encrypt/decrypt) Library",
+    "keywords": ["php", "crypto", "encrypt", "decrypt"],
+    "homepage": "https://github.com/yurijbogdanov/crypto",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Iurii Bogdanov",
+            "email": "bogdanovyurij@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "ext-mbstring": "*",
+        "ext-sodium": "*"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "phpunit/phpunit": "^10",
+        "phpstan/phpstan": "^1",
+        "friendsofphp/php-cs-fixer": "^3"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "YB\\Crypto\\": "src/"
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "YB\\Crypto\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": [
+            "php vendor/bin/php-cs-fixer fix --dry-run --allow-risky=yes --using-cache=no --diff -vv",
+            "php vendor/bin/phpstan analyse",
+            "php vendor/bin/phpunit --no-coverage"
+        ]
+    }
+}

@@ -1,1 +1,1 @@
-# crypto
+# PHP Crypto (encrypt/decrypt) Library
