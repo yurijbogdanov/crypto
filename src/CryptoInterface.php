@@ -4,42 +4,35 @@ declare(strict_types=1);
 
 namespace YB\Crypto;
 
-use YB\Crypto\Exception\DecryptFailedException;
-use YB\Crypto\Exception\DecryptWithNonceFailedException;
-use YB\Crypto\Exception\EncryptFailedException;
-use YB\Crypto\Exception\EncryptWithNonceFailedException;
-use YB\Crypto\Exception\GenerateKeyFailedException;
-use YB\Crypto\Exception\GenerateNonceFailedException;
-
 interface CryptoInterface
 {
     /**
-     * @throws GenerateKeyFailedException
+     * @throws Exception\GenerateKeyFailedException
      */
     public static function generateKey(): string;
 
     /**
-     * @throws EncryptFailedException
+     * @throws Exception\EncryptFailedException
      */
     public static function encrypt(string $key, string $content): string;
 
     /**
-     * @throws DecryptFailedException
+     * @throws Exception\DecryptFailedException
      */
     public static function decrypt(string $key, string $content): string;
 
     /**
-     * @throws EncryptWithNonceFailedException
+     * @throws Exception\EncryptWithNonceFailedException
      */
     public static function encryptWithNonce(string $key, string $content, string $nonce): string;
 
     /**
-     * @throws DecryptWithNonceFailedException
+     * @throws Exception\DecryptWithNonceFailedException
      */
     public static function decryptWithNonce(string $key, string $content, string $nonce): string;
 
     /**
-     * @throws GenerateNonceFailedException
+     * @throws Exception\GenerateNonceFailedException
      */
     public static function generateNonce(): string;
 }
