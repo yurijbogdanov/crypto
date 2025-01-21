@@ -7,7 +7,18 @@ if ('cli' !== \PHP_SAPI) {
     exit(1);
 }
 
-require dirname(__DIR__).'/vendor/autoload.php';
+function includeIfExists(string $file): bool
+{
+    return file_exists($file) && require $file;
+}
+
+if (
+    !includeIfExists(dirname(__DIR__).'/vendor/autoload.php')
+    && !includeIfExists(dirname(__DIR__).'/../../../autoload.php')
+) {
+    fwrite(STDERR, "Install dependencies using Composer\n");
+    exit(1);
+}
 
 use YB\Crypto\Crypto;
 
@@ -36,8 +47,7 @@ TEXT,
         default => sprintf('Command "%s" not found', $command),
     };
 } catch (\Throwable $e) {
-    echo sprintf('Error occurred: %s', $e->getMessage()), "\n";
-
+    fwrite(STDERR, "Error occurred: ".$e->getMessage()."\n");
     exit(1);
 }
 

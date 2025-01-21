@@ -105,6 +105,9 @@ final class CryptoTest extends TestCase
         Crypto::decrypt('', '');
     }
 
+    /**
+     * @return array<int, string>[]
+     */
     public static function provideEncryptCases(): iterable
     {
         yield ['AAA8jibi_JGprM9QFmgE3xQ4DYPezmtSb7Hiflg2p08', ''];
@@ -113,6 +116,8 @@ final class CryptoTest extends TestCase
     }
 
     /**
+     * @return array<int, string>[]
+     *
      * @throws Exception\CryptoExceptionInterface
      */
     public static function provideDecryptCases(): iterable
@@ -128,6 +133,9 @@ final class CryptoTest extends TestCase
         yield [$key, Crypto::encrypt($key, $content), $content];
     }
 
+    /**
+     * @return array<int, string>[]
+     */
     public static function provideEncryptWithNonceCases(): iterable
     {
         yield [
@@ -145,6 +153,9 @@ final class CryptoTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<int, string>[]
+     */
     public static function provideDecryptWithNonceCases(): iterable
     {
         yield [
