@@ -14,7 +14,7 @@ function includeIfExists(string $file): bool
 
 if (
     !includeIfExists(dirname(__DIR__).'/vendor/autoload.php')
-    && !includeIfExists(dirname(__DIR__).'/../../../autoload.php')
+    && !includeIfExists(dirname(__DIR__).'/../../autoload.php')
 ) {
     fwrite(STDERR, "Install dependencies using Composer\n");
     exit(1);
