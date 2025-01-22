@@ -3,7 +3,6 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/yurijbogdanov/crypto?style=flat)](https://packagist.org/packages/yurijbogdanov/crypto)
 [![License](https://img.shields.io/packagist/l/yurijbogdanov/crypto?style=flat)](https://packagist.org/packages/yurijbogdanov/crypto)
 [![Total Downloads](https://img.shields.io/packagist/dt/yurijbogdanov/crypto.svg?style=flat)](https://packagist.org/packages/yurijbogdanov/crypto)
-[![PHP Version Require](http://poser.pugx.org/yurijbogdanov/crypto/require/php)](https://packagist.org/packages/yurijbogdanov/crypto)
 
 
 ## Installation
