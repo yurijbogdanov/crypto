@@ -23,31 +23,20 @@ if (
 use YB\Crypto\Crypto;
 
 $command = $argv[1] ?? '';
-$key = $argv[2] ?? '';
+$secret = $argv[2] ?? '';
 $contentOrFilename = $argv[3] ?? '';
-$nonce = $argv[4] ?? '';
 
 try {
     echo match ($command) {
         '' => <<<'TEXT'
 Available commands:
-    generate_key
-    generate_nonce
-    encrypt [KEY] [CONTENT]
-    decrypt [KEY] [CONTENT]
-    encrypt_with_nonce [KEY] [CONTENT] [NONCE]
-    decrypt_with_nonce [KEY] [CONTENT] [NONCE]
-    encrypt_file_with_nonce [KEY] [CONTENT] [NONCE]
-    decrypt_file_with_nonce [KEY] [CONTENT] [NONCE]
+    generate_secret
+    encrypt [SECRET] [CONTENT]
+    decrypt [SECRET] [CONTENT]
 TEXT,
-        'generate_key' => Crypto::generateKey(),
-        'generate_nonce' => Crypto::generateNonce(),
-        'encrypt' => Crypto::encrypt($key, $contentOrFilename),
-        'decrypt' => Crypto::decrypt($key, $contentOrFilename),
-        'encrypt_with_nonce' => Crypto::encryptWithNonce($key, $contentOrFilename, $nonce),
-        'decrypt_with_nonce' => Crypto::decryptWithNonce($key, $contentOrFilename, $nonce),
-        'encrypt_file_with_nonce' => Crypto::encryptFileWithNonce($key, $contentOrFilename, $nonce),
-        'decrypt_file_with_nonce' => Crypto::decryptFileWithNonce($key, $contentOrFilename, $nonce),
+        'generate_secret' => Crypto::generateSecret(),
+        'encrypt' => Crypto::encrypt($secret, $contentOrFilename),
+        'decrypt' => Crypto::decrypt($secret, $contentOrFilename),
         default => sprintf('Command "%s" not found', $command),
     };
 } catch (\Throwable $e) {
