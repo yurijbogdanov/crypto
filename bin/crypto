@@ -33,10 +33,14 @@ Available commands:
     generate_secret
     encrypt [SECRET] [CONTENT]
     decrypt [SECRET] [CONTENT]
+    encrypt_file [SECRET] [FILENAME]
+    decrypt_file [SECRET] [FILENAME]
 TEXT,
         'generate_secret' => Crypto::generateSecret(),
         'encrypt' => Crypto::encrypt($secret, $contentOrFilename),
         'decrypt' => Crypto::decrypt($secret, $contentOrFilename),
+        'encrypt_file' => Crypto::encryptFile($secret, $contentOrFilename),
+        'decrypt_file' => Crypto::decryptFile($secret, $contentOrFilename),
         default => sprintf('Command "%s" not found', $command),
     };
 } catch (\Throwable $e) {

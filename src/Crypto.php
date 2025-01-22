@@ -8,6 +8,8 @@ class Crypto
 {
     private const ALGO_SODIUM_CRYPTO_AEAD_XCHACHA20POLY1305_IETF = 'sodium_crypto_aead_xchacha20poly1305_ietf';
 
+    private const ENCRYPTED_FILE_EXTENSION = '.encrypted.txt';
+
     /**
      * @throws Exception\GenerateSecretFailedException
      */
@@ -76,6 +78,57 @@ class Crypto
             return $decryptedContent;
         } catch (\Throwable $e) {
             throw new Exception\DecryptFailedException($e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * @throws Exception\EncryptFileFailedException
+     */
+    public static function encryptFile(string $secret, string $filename): string
+    {
+        try {
+            if (false === $filePathname = realpath($filename)) {
+                throw new Exception\EncryptFileFailedException('File does not exist: '.$filename);
+            }
+
+            if (false === $content = file_get_contents($filePathname)) {
+                throw new Exception\EncryptFileFailedException('Cannot read file: '.$filePathname);
+            }
+
+            $encryptedFilePathname = $filePathname.self::ENCRYPTED_FILE_EXTENSION;
+            if (false === file_put_contents($encryptedFilePathname, self::encrypt($secret, $content))) {
+                throw new Exception\EncryptFileFailedException('Cannot save content into file: '.$encryptedFilePathname);
+            }
+
+            return $encryptedFilePathname;
+        } catch (\Throwable $e) {
+            throw new Exception\EncryptFileFailedException($e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * @throws Exception\DecryptFileFailedException
+     */
+    public static function decryptFile(string $secret, string $filename): string
+    {
+        try {
+            if (false === $filePathname = realpath($filename)) {
+                throw new Exception\DecryptFileFailedException('File does not exist: '.$filename);
+            }
+
+            if (false === $encryptedContent = file_get_contents($filePathname)) {
+                throw new Exception\DecryptFileFailedException('Cannot read file: '.$filePathname);
+            }
+
+            $decryptedFilePathname = str_replace(self::ENCRYPTED_FILE_EXTENSION, '', $filePathname);
+
+            if (false === file_put_contents($decryptedFilePathname, self::decrypt($secret, trim($encryptedContent)))) {
+                throw new Exception\DecryptFileFailedException('Cannot save content into file: '.$decryptedFilePathname);
+            }
+
+            return $decryptedFilePathname;
+        } catch (\Throwable $e) {
+            throw new Exception\DecryptFileFailedException($e->getMessage(), 0, $e);
         }
     }
 

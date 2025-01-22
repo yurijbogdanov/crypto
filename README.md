@@ -35,6 +35,22 @@ $decryptedContent = Crypto::decrypt($secret, $content);
 // Result: Lorem ipsum dolor sit amet
 ```
 
+Encrypt file:
+```terminal
+$secret = 'c29kaXVtX2NyeXB0b19hZWFkX3hjaGFjaGEyMHBvbHkxMzA1X2lldGYuM443WWLIVeqJWCv16zLIAliPnOwfk3z2YKgfi9TlxfQuItcES9FWz7qPvsSKeTiABVGkVFXfHFjD';
+$filename = 'test.txt';
+$encryptedFilename = Crypto::encryptFile($secret, $filename);
+// Result: test.txt.encrypted.txt
+```
+
+Decrypt file:
+```terminal
+$secret = 'c29kaXVtX2NyeXB0b19hZWFkX3hjaGFjaGEyMHBvbHkxMzA1X2lldGYuM443WWLIVeqJWCv16zLIAliPnOwfk3z2YKgfi9TlxfQuItcES9FWz7qPvsSKeTiABVGkVFXfHFjD';
+$filename = 'test.txt.encrypted.txt';
+$decryptedFilename = Crypto::decryptFile($secret, $filename);
+// Result: test.txt
+```
+
 
 ## Usage via Terminal
 List of commands:
@@ -45,19 +61,33 @@ bin/crypto
 Generate new secret:
 ```terminal
 bin/crypto generate_secret
-# Output: c29kaXVtX2NyeXB0b19hZWFkX3hjaGFjaGEyMHBvbHkxMzA1X2lldGYuM443WWLIVeqJWCv16zLIAliPnOwfk3z2YKgfi9TlxfQuItcES9FWz7qPvsSKeTiABVGkVFXfHFjD
+# Result: c29kaXVtX2NyeXB0b19hZWFkX3hjaGFjaGEyMHBvbHkxMzA1X2lldGYuM443WWLIVeqJWCv16zLIAliPnOwfk3z2YKgfi9TlxfQuItcES9FWz7qPvsSKeTiABVGkVFXfHFjD
 ```
 
 Encrypt:
 ```terminal
 bin/crypto encrypt [SECRET] [CONTENT]
 bin/crypto encrypt c29kaXVtX2NyeXB0b19hZWFkX3hjaGFjaGEyMHBvbHkxMzA1X2lldGYuM443WWLIVeqJWCv16zLIAliPnOwfk3z2YKgfi9TlxfQuItcES9FWz7qPvsSKeTiABVGkVFXfHFjD "Lorem ipsum dolor sit amet"
-# Output: fqVFisbX2Jarzt2l-69hZplsSW1HRc9UsBJbveqNPPz0z4bYQXpw6r33
+# Result: fqVFisbX2Jarzt2l-69hZplsSW1HRc9UsBJbveqNPPz0z4bYQXpw6r33
 ```
 
 Decrypt:
 ```terminal
 bin/crypto decrypt [SECRET] [CONTENT]
 bin/crypto decrypt c29kaXVtX2NyeXB0b19hZWFkX3hjaGFjaGEyMHBvbHkxMzA1X2lldGYuM443WWLIVeqJWCv16zLIAliPnOwfk3z2YKgfi9TlxfQuItcES9FWz7qPvsSKeTiABVGkVFXfHFjD fqVFisbX2Jarzt2l-69hZplsSW1HRc9UsBJbveqNPPz0z4bYQXpw6r33
-# Output: Lorem ipsum dolor sit amet
+# Result: Lorem ipsum dolor sit amet
+```
+
+Encrypt file:
+```terminal
+bin/crypto encrypt_file [SECRET] [FILENAME]
+bin/crypto encrypt_file c29kaXVtX2NyeXB0b19hZWFkX3hjaGFjaGEyMHBvbHkxMzA1X2lldGYuM443WWLIVeqJWCv16zLIAliPnOwfk3z2YKgfi9TlxfQuItcES9FWz7qPvsSKeTiABVGkVFXfHFjD test.txt
+# Result: test.txt.encrypted.txt
+```
+
+Decrypt file:
+```terminal
+bin/crypto decrypt_file [SECRET] [FILENAME]
+bin/crypto decrypt_file c29kaXVtX2NyeXB0b19hZWFkX3hjaGFjaGEyMHBvbHkxMzA1X2lldGYuM443WWLIVeqJWCv16zLIAliPnOwfk3z2YKgfi9TlxfQuItcES9FWz7qPvsSKeTiABVGkVFXfHFjD test.txt.encrypted.txt
+# Result: test.txt
 ```

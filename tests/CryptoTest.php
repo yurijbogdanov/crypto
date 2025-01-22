@@ -50,6 +50,34 @@ final class CryptoTest extends TestCase
         Crypto::decrypt($secret, $content);
     }
 
+    /** @dataProvider provideEncryptFileCases */
+    public function testEncryptFile(string $secret, string $filename, string $expected): void
+    {
+        try {
+            $encryptedFilename = Crypto::encryptFile($secret, $filename);
+            $content = file_get_contents($encryptedFilename);
+            Assert::assertEquals($expected, $content);
+        } finally {
+            if (isset($encryptedFilename)) {
+                unlink($encryptedFilename);
+            }
+        }
+    }
+
+    /** @dataProvider provideDecryptFileCases */
+    public function testDecryptFile(string $secret, string $filename, string $expected): void
+    {
+        try {
+            $decryptedFilename = Crypto::decryptFile($secret, $filename);
+            $content = file_get_contents($decryptedFilename);
+            Assert::assertEquals($expected, $content);
+        } finally {
+            if (isset($decryptedFilename)) {
+                unlink($decryptedFilename);
+            }
+        }
+    }
+
     /**
      * @return array<int, string>[]
      */
@@ -132,6 +160,30 @@ final class CryptoTest extends TestCase
         yield [
             self::DEFAULT_SECRET,
             'incorrect content', // content should be encoded
+        ];
+    }
+
+    /**
+     * @return array<int, string>[]
+     */
+    public static function provideEncryptFileCases(): iterable
+    {
+        yield [
+            self::DEFAULT_SECRET,
+            __DIR__.'/data/test_1.txt',
+            'A_sG5ZnFg-zriIOPOFPrV6gfFz357PLBt2OSNw',
+        ];
+    }
+
+    /**
+     * @return array<int, string>[]
+     */
+    public static function provideDecryptFileCases(): iterable
+    {
+        yield [
+            self::DEFAULT_SECRET,
+            __DIR__.'/data/test_2.txt.encrypted.txt',
+            "111\n222\n333\n",
         ];
     }
 }
