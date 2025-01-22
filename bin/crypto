@@ -22,10 +22,10 @@ if (
 
 use YB\Crypto\Crypto;
 
-$command = (string) ($argv[1] ?? '');
-$key = (string) ($argv[2] ?? '');
-$content = (string) ($argv[3] ?? '');
-$nonce = (string) ($argv[4] ?? '');
+$command = $argv[1] ?? '';
+$key = $argv[2] ?? '';
+$contentOrFilename = $argv[3] ?? '';
+$nonce = $argv[4] ?? '';
 
 try {
     echo match ($command) {
@@ -37,13 +37,17 @@ Available commands:
     decrypt [KEY] [CONTENT]
     encrypt_with_nonce [KEY] [CONTENT] [NONCE]
     decrypt_with_nonce [KEY] [CONTENT] [NONCE]
+    encrypt_file_with_nonce [KEY] [CONTENT] [NONCE]
+    decrypt_file_with_nonce [KEY] [CONTENT] [NONCE]
 TEXT,
         'generate_key' => Crypto::generateKey(),
         'generate_nonce' => Crypto::generateNonce(),
-        'encrypt' => Crypto::encrypt($key, $content),
-        'decrypt' => Crypto::decrypt($key, $content),
-        'encrypt_with_nonce' => Crypto::encryptWithNonce($key, $content, $nonce),
-        'decrypt_with_nonce' => Crypto::decryptWithNonce($key, $content, $nonce),
+        'encrypt' => Crypto::encrypt($key, $contentOrFilename),
+        'decrypt' => Crypto::decrypt($key, $contentOrFilename),
+        'encrypt_with_nonce' => Crypto::encryptWithNonce($key, $contentOrFilename, $nonce),
+        'decrypt_with_nonce' => Crypto::decryptWithNonce($key, $contentOrFilename, $nonce),
+        'encrypt_file_with_nonce' => Crypto::encryptFileWithNonce($key, $contentOrFilename, $nonce),
+        'decrypt_file_with_nonce' => Crypto::decryptFileWithNonce($key, $contentOrFilename, $nonce),
         default => sprintf('Command "%s" not found', $command),
     };
 } catch (\Throwable $e) {

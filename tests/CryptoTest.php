@@ -81,6 +81,42 @@ final class CryptoTest extends TestCase
         Assert::assertEquals($expected, $decryptedContent);
     }
 
+    /**
+     * @throws Exception\CryptoExceptionInterface
+     *
+     * @dataProvider provideEncryptFileWithNonceCases
+     */
+    public function testEncryptFileWithNonce(string $key, string $filename, string $nonce, string $expected): void
+    {
+        try {
+            $encryptedFilename = Crypto::encryptFileWithNonce($key, $filename, $nonce);
+            $content = file_get_contents($encryptedFilename);
+            Assert::assertEquals($expected, $content);
+        } finally {
+            if (isset($encryptedFilename)) {
+                unlink($encryptedFilename);
+            }
+        }
+    }
+
+    /**
+     * @throws Exception\CryptoExceptionInterface
+     *
+     * @dataProvider provideDecryptFileWithNonceCases
+     */
+    public function testDecryptFileWithNonce(string $key, string $filename, string $nonce, string $expected): void
+    {
+        try {
+            $decryptedFilename = Crypto::decryptFileWithNonce($key, $filename, $nonce);
+            $content = file_get_contents($decryptedFilename);
+            Assert::assertEquals($expected, $content);
+        } finally {
+            if (isset($decryptedFilename)) {
+                unlink($decryptedFilename);
+            }
+        }
+    }
+
     public function testDecryptFailed(): void
     {
         $this->expectException(Exception\DecryptFailedException::class);
@@ -170,6 +206,32 @@ final class CryptoTest extends TestCase
             'Z_BiSkdBaoFM33wnuSZDFFP1Les7KqwBJZelH2El5Y3LBkNCnQ_A_ozTd13d1nSevYj-JW4_yKIBolwI4ZOWR051PmvTIDOeqIGtYxP6sFvCYOFEVqsTCQraMOJLyc5SqPlsgG0AerWp82UtaUtr7894j0gi5jpcdyftg82tL0p152di2oz7CGrUT7iV7_Lxj9HFHaINK4BYRtpsM_aS2sbYzApCFTYBmBjd',
             'K5tqyEb3eE9jWKlf8KICLGTtW1vmAPHv',
             "ProvideDecryptWithNonceCases Lorem ipsum\n dolor sit amet,\n\n consectetur adipisici elit,\t\t sed eiusmod tempor incidunt ut\t\t labore et dolore magna aliqua.\n\n",
+        ];
+    }
+
+    /**
+     * @return array<int, string>[]
+     */
+    public static function provideEncryptFileWithNonceCases(): iterable
+    {
+        yield [
+            'DWd3fZKT2ZM_N4gVA2CJyRTZ_jYefYVLuS48b5VjbCs',
+            __DIR__.'/data/test_1.txt',
+            'rjyhK-AQ3uwghlHVS-msLKC1UlQMgkSV',
+            'oO8SihW69F7YqIjqUtig-LZZCq_HRY0I-Iym_Q',
+        ];
+    }
+
+    /**
+     * @return array<int, string>[]
+     */
+    public static function provideDecryptFileWithNonceCases(): iterable
+    {
+        yield [
+            'DWd3fZKT2ZM_N4gVA2CJyRTZ_jYefYVLuS48b5VjbCs',
+            __DIR__.'/data/test_2.txt.encrypted.txt',
+            'rjyhK-AQ3uwghlHVS-msLKC1UlQMgkSV',
+            "111\n222\n333\n",
         ];
     }
 }

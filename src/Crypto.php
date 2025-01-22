@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace YB\Crypto;
 
-final class Crypto implements CryptoInterface
+class Crypto
 {
+    private const ENCRYPTED_FILE_EXTENSION = '.encrypted.txt';
+
+    /**
+     * @throws Exception\GenerateKeyFailedException
+     */
     public static function generateKey(): string
     {
         try {
@@ -17,6 +22,9 @@ final class Crypto implements CryptoInterface
         }
     }
 
+    /**
+     * @throws Exception\GenerateNonceFailedException
+     */
     public static function generateNonce(): string
     {
         try {
@@ -28,6 +36,9 @@ final class Crypto implements CryptoInterface
         }
     }
 
+    /**
+     * @throws Exception\EncryptFailedException
+     */
     public static function encrypt(string $key, string $content): string
     {
         try {
@@ -42,6 +53,9 @@ final class Crypto implements CryptoInterface
         }
     }
 
+    /**
+     * @throws Exception\DecryptFailedException
+     */
     public static function decrypt(string $key, string $content): string
     {
         try {
@@ -61,6 +75,9 @@ final class Crypto implements CryptoInterface
         }
     }
 
+    /**
+     * @throws Exception\EncryptWithNonceFailedException
+     */
     public static function encryptWithNonce(string $key, string $content, string $nonce): string
     {
         try {
@@ -75,6 +92,9 @@ final class Crypto implements CryptoInterface
         }
     }
 
+    /**
+     * @throws Exception\DecryptWithNonceFailedException
+     */
     public static function decryptWithNonce(string $key, string $content, string $nonce): string
     {
         try {
@@ -90,6 +110,64 @@ final class Crypto implements CryptoInterface
             return $decryptedContent;
         } catch (\Throwable $e) {
             throw new Exception\DecryptWithNonceFailedException($e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * @throws Exception\EncryptFileWithNonceFailedException
+     */
+    public static function encryptFileWithNonce(string $key, string $filename, string $nonce): string
+    {
+        try {
+            $filePathname = realpath($filename);
+            if (false === $filePathname) {
+                throw new Exception\EncryptFileWithNonceFailedException('File does not exist: '.$filename);
+            }
+
+            $content = file_get_contents($filePathname);
+            if (false === $content) {
+                throw new Exception\EncryptFileWithNonceFailedException('Cannot read file: '.$filePathname);
+            }
+
+            $encryptedFilePathname = $filePathname.self::ENCRYPTED_FILE_EXTENSION;
+            if (false === file_put_contents($encryptedFilePathname, self::encryptWithNonce($key, $content, $nonce))) {
+                throw new Exception\EncryptFileWithNonceFailedException('Cannot save content into file: '.$encryptedFilePathname);
+            }
+
+            return $encryptedFilePathname;
+        } catch (\Throwable $e) {
+            throw new Exception\EncryptFileWithNonceFailedException($e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * @throws Exception\DecryptFileWithNonceFailedException
+     */
+    public static function decryptFileWithNonce(string $key, string $filename, string $nonce): string
+    {
+        try {
+            $filePathname = realpath($filename);
+            if (false === $filePathname) {
+                throw new Exception\DecryptFileWithNonceFailedException('File does not exist: '.$filename);
+            }
+
+            $encryptedContent = file_get_contents($filePathname);
+            if (false === $encryptedContent) {
+                throw new Exception\DecryptFileWithNonceFailedException('Cannot read file: '.$filePathname);
+            }
+            $encryptedContent = trim($encryptedContent);
+
+            $decryptedContent = self::decryptWithNonce($key, $encryptedContent, $nonce);
+
+            $decryptedFilePathname = str_replace(self::ENCRYPTED_FILE_EXTENSION, '', $filePathname);
+
+            if (false === file_put_contents($decryptedFilePathname, $decryptedContent)) {
+                throw new Exception\DecryptFileWithNonceFailedException('Cannot save content into file: '.$decryptedFilePathname);
+            }
+
+            return $decryptedFilePathname;
+        } catch (\Throwable $e) {
+            throw new Exception\DecryptFileWithNonceFailedException($e->getMessage(), 0, $e);
         }
     }
 
